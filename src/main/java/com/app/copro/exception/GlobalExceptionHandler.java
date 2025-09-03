@@ -34,6 +34,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(SyndicCreationException.class)
+    public ResponseEntity<ErrorResponse> handleSyndicCreationException(SyndicCreationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

@@ -3,11 +3,13 @@ package com.app.copro.service;
 import com.app.copro.dto.CreateSyndicDto;
 import com.app.copro.dto.SyndicResponseDto;
 import com.app.copro.exception.ProjetNotFoundException;
+import com.app.copro.exception.SyndicCreationException;
 import com.app.copro.model.Projet;
 import com.app.copro.model.Syndic;
 import com.app.copro.repository.ProjetRepository;
 import com.app.copro.repository.SyndicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,8 +57,12 @@ public class SyndicService {
         syndic.setDocTamponSignaturePath(createSyndicDto.getDocTamponSignaturePath());
         syndic.setProjet(projet);
 
-        Syndic saved = syndicRepository.save(syndic);
-        return mapToResponseDto(saved);
+        try {
+            Syndic saved = syndicRepository.save(syndic);
+            return mapToResponseDto(saved);
+        } catch (DataAccessException ex) {
+            throw new SyndicCreationException("Erreur lors de la création du syndic", ex);
+        }
     }
 
     private SyndicResponseDto mapToResponseDto(Syndic syndic) {
