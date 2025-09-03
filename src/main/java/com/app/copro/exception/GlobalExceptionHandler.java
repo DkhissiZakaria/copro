@@ -15,13 +15,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProjetNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProjetNotFoundException(ProjetNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleProjetNotFound(ProjetNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(ProjetAlreadyExistsException.class)
