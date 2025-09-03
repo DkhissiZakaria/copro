@@ -56,6 +56,7 @@ public class SyndicService {
         syndic.setDocGarantieFinancierePath(createSyndicDto.getDocGarantieFinancierePath());
         syndic.setDocTamponSignaturePath(createSyndicDto.getDocTamponSignaturePath());
         syndic.setProjet(projet);
+        projet.getSyndics().add(syndic);
 
         try {
             Syndic saved = syndicRepository.save(syndic);
