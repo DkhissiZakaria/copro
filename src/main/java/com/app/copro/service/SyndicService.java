@@ -29,6 +29,30 @@ public class SyndicService {
         Syndic syndic = new Syndic();
         syndic.setNom(createSyndicDto.getNom());
         syndic.setEmail(createSyndicDto.getEmail());
+        syndic.setTelephone(createSyndicDto.getTelephone());
+        syndic.setTelecopie(createSyndicDto.getTelecopie());
+        syndic.setWeb(createSyndicDto.getWeb());
+        syndic.setAdresseNumeroRue(createSyndicDto.getAdresseNumeroRue());
+        syndic.setAdresseComplement(createSyndicDto.getAdresseComplement());
+        syndic.setAdresseCodePostal(createSyndicDto.getAdresseCodePostal());
+        syndic.setAdresseVille(createSyndicDto.getAdresseVille());
+        syndic.setAdresseRegion(createSyndicDto.getAdresseRegion());
+        syndic.setAdressePays(createSyndicDto.getAdressePays());
+        syndic.setSiret(createSyndicDto.getSiret());
+        syndic.setApe(createSyndicDto.getApe());
+        syndic.setCarteProfessionnelle(createSyndicDto.getCarteProfessionnelle());
+        syndic.setCapital(createSyndicDto.getCapital());
+        syndic.setLogoCoordonneesPath(createSyndicDto.getLogoCoordonneesPath());
+        syndic.setLogoSimplePath(createSyndicDto.getLogoSimplePath());
+        syndic.setPointeFinanciere(createSyndicDto.getPointeFinanciere());
+        syndic.setSocieteGarant(createSyndicDto.getSocieteGarant());
+        syndic.setNumeroTeleDeclarant(createSyndicDto.getNumeroTeleDeclarant());
+        syndic.setMailTeleDeclarant(createSyndicDto.getMailTeleDeclarant());
+        syndic.setDescription(createSyndicDto.getDescription());
+        syndic.setDocCarteProfessionnellePath(createSyndicDto.getDocCarteProfessionnellePath());
+        syndic.setDocAssuranceRcPath(createSyndicDto.getDocAssuranceRcPath());
+        syndic.setDocGarantieFinancierePath(createSyndicDto.getDocGarantieFinancierePath());
+        syndic.setDocTamponSignaturePath(createSyndicDto.getDocTamponSignaturePath());
         syndic.setProjet(projet);
 
         Syndic saved = syndicRepository.save(syndic);
@@ -36,7 +60,35 @@ public class SyndicService {
     }
 
     private SyndicResponseDto mapToResponseDto(Syndic syndic) {
-        Long projetId = syndic.getProjet() != null ? syndic.getProjet().getId() : null;
-        return new SyndicResponseDto(syndic.getId(), syndic.getNom(), syndic.getEmail(), projetId);
+        SyndicResponseDto dto = new SyndicResponseDto();
+        dto.setId(syndic.getId());
+        dto.setNom(syndic.getNom());
+        dto.setEmail(syndic.getEmail());
+        dto.setTelephone(syndic.getTelephone());
+        dto.setTelecopie(syndic.getTelecopie());
+        dto.setWeb(syndic.getWeb());
+        dto.setAdresseNumeroRue(syndic.getAdresseNumeroRue());
+        dto.setAdresseComplement(syndic.getAdresseComplement());
+        dto.setAdresseCodePostal(syndic.getAdresseCodePostal());
+        dto.setAdresseVille(syndic.getAdresseVille());
+        dto.setAdresseRegion(syndic.getAdresseRegion());
+        dto.setAdressePays(syndic.getAdressePays());
+        dto.setSiret(syndic.getSiret());
+        dto.setApe(syndic.getApe());
+        dto.setCarteProfessionnelle(syndic.getCarteProfessionnelle());
+        dto.setCapital(syndic.getCapital());
+        dto.setLogoCoordonneesPath(syndic.getLogoCoordonneesPath());
+        dto.setLogoSimplePath(syndic.getLogoSimplePath());
+        dto.setPointeFinanciere(syndic.getPointeFinanciere());
+        dto.setSocieteGarant(syndic.getSocieteGarant());
+        dto.setNumeroTeleDeclarant(syndic.getNumeroTeleDeclarant());
+        dto.setMailTeleDeclarant(syndic.getMailTeleDeclarant());
+        dto.setDescription(syndic.getDescription());
+        dto.setDocCarteProfessionnellePath(syndic.getDocCarteProfessionnellePath());
+        dto.setDocAssuranceRcPath(syndic.getDocAssuranceRcPath());
+        dto.setDocGarantieFinancierePath(syndic.getDocGarantieFinancierePath());
+        dto.setDocTamponSignaturePath(syndic.getDocTamponSignaturePath());
+        dto.setProjetId(syndic.getProjet() != null ? syndic.getProjet().getId() : null);
+        return dto;
     }
 }
