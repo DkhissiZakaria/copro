@@ -12,4 +12,6 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
     Optional<Projet> findByNom(String nom);
 
     boolean existsByNom(String nom);
+
+    Optional<Projet> findByIdMakePlan(Long idMakePlan);
 }

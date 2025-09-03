@@ -15,7 +15,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProjetNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProjetNotFoundException(ProjetNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleProjetNotFound(ProjetNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
@@ -32,6 +32,26 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(SyndicCreationException.class)
+    public ResponseEntity<ErrorResponse> handleSyndicCreationException(SyndicCreationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(SyndicNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSyndicNotFoundException(SyndicNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

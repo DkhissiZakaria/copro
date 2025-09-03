@@ -14,7 +14,7 @@ public class Carnet {
     @Column(nullable = false, length = 150)
     private String titre;
 
-    @Lob
+    @Column(length = 5000)
     private String contenu;
 
     // ManyToOne vers Syndic (existant)
@@ -38,4 +38,68 @@ public class Carnet {
     // 1–N Travaux importants (FK côté TravailImportant)
     @OneToMany(mappedBy = "carnet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravailImportant> travauxImportants = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getContenu() {
+        return contenu;
+    }
+
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
+    }
+
+    public Syndic getSyndic() {
+        return syndic;
+    }
+
+    public void setSyndic(Syndic syndic) {
+        this.syndic = syndic;
+    }
+
+    public DonneesAdministratives getDonneesAdministratives() {
+        return donneesAdministratives;
+    }
+
+    public void setDonneesAdministratives(DonneesAdministratives donneesAdministratives) {
+        this.donneesAdministratives = donneesAdministratives;
+    }
+
+    public DonneesTechniques getDonneesTechniques() {
+        return donneesTechniques;
+    }
+
+    public void setDonneesTechniques(DonneesTechniques donneesTechniques) {
+        this.donneesTechniques = donneesTechniques;
+    }
+
+    public List<ContratAssurance> getContrats() {
+        return contrats;
+    }
+
+    public void setContrats(List<ContratAssurance> contrats) {
+        this.contrats = contrats;
+    }
+
+    public List<TravailImportant> getTravauxImportants() {
+        return travauxImportants;
+    }
+
+    public void setTravauxImportants(List<TravailImportant> travauxImportants) {
+        this.travauxImportants = travauxImportants;
+    }
 }

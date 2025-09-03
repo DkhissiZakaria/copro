@@ -1,128 +1,40 @@
-package com.app.copro.model;
+package com.app.copro.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+public class SyndicResponseDto {
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Table(name = "syndic")
-public class Syndic {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // ===== Détail du Syndic =====
-    @Column(nullable = false, length = 120)
     private String nom;
-
-
-    @Column(nullable = false, length = 150)
     private String email;
-
-    @Column(length = 50)
     private String telephone;
-
-    @Column(length = 50)
-    private String telecopie; // fax
-
-    @Column(length = 255)
-    private String web; // url
-
-    // ===== Adresse =====
-    @Column(length = 180)
-    private String adresseNumeroRue;   // N° et rue
-
-    @Column(length = 180)
-    private String adresseComplement;  // Complément
-
-    @Column(length = 20)
+    private String telecopie;
+    private String web;
+    private String adresseNumeroRue;
+    private String adresseComplement;
     private String adresseCodePostal;
-
-    @Column(length = 120)
     private String adresseVille;
-
-    @Column(length = 120)
     private String adresseRegion;
-
-    @Column(length = 120)
     private String adressePays;
-
-    // ===== Informations juridiques =====
-    @Column(length = 20)
     private String siret;
-
-    @Column(length = 20)
     private String ape;
-
-    @Column(length = 120)
-    private String carteProfessionnelle; // n°/référence
-
-    // Capital : string pour tolérer formats non strictement numériques
-    @Column(length = 50)
+    private String carteProfessionnelle;
     private String capital;
-
-    // Logos (stockage simple : chemin/URL du fichier)
-    @Column(length = 255)
-    private String logoCoordonneesPath; // 510x260
-
-    @Column(length = 255)
-    private String logoSimplePath;      // signature mail
-
-    // ===== Garantie Financière =====
-    @Column(length = 150)
-    private String pointeFinanciere ;
-
-    @Column(length = 120)
+    private String logoCoordonneesPath;
+    private String logoSimplePath;
+    private String pointeFinanciere;
     private String societeGarant;
-
-    // ===== Registre Copropriété =====
-    @Column(length = 50)
     private String numeroTeleDeclarant;
-
-    @Column(length = 150)
     private String mailTeleDeclarant;
-
-    // ===== Description =====
-    @Column(length = 2000)
     private String description;
-
-    // ===== Documents (uploads : chemins/URLs) =====
-    @Column(length = 255)
     private String docCarteProfessionnellePath;
+    private String docAssuranceRcPath;
+    private String docGarantieFinancierePath;
+    private String docTamponSignaturePath;
+    private Long projetId;
+    private Boolean isActive;
 
-    @Column(length = 255)
-    private String docAssuranceRcPath; // attestation RC pro
+    public SyndicResponseDto() {}
 
-    @Column(length = 255)
-    private String docGarantieFinancierePath; // attestation GF
-
-    @Column(length = 255)
-    private String docTamponSignaturePath; // tampon + signature
-
-    // ===== Statut =====
-    @Column(nullable = false)
-    private Boolean isActive = false;
-
-    // ===== Relations existantes =====
-
-    // ManyToOne vers Projet
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projet_id")
-    @JsonIgnore
-    private Projet projet;
-
-    // Relations temporairement commentées pour éviter les problèmes de mapping
-    // @OneToOne(mappedBy = "syndic", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    // private Mandat mandat;
-
-    // @OneToMany(mappedBy = "syndic", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Carnet> carnets = new ArrayList<>();
-
-    // ===== Getters/Setters =====
+    // getters and setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -210,16 +122,9 @@ public class Syndic {
     public String getDocTamponSignaturePath() { return docTamponSignaturePath; }
     public void setDocTamponSignaturePath(String docTamponSignaturePath) { this.docTamponSignaturePath = docTamponSignaturePath; }
 
+    public Long getProjetId() { return projetId; }
+    public void setProjetId(Long projetId) { this.projetId = projetId; }
+
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
-
-    public Projet getProjet() { return projet; }
-    public void setProjet(Projet projet) { this.projet = projet; }
-
-    // Temporairement commenté
-    // public Mandat getMandat() { return mandat; }
-    // public void setMandat(Mandat mandat) { this.mandat = mandat; }
-
-    // public List<Carnet> getCarnets() { return carnets; }
-    // public void setCarnets(List<Carnet> carnets) { this.carnets = carnets; }
 }
