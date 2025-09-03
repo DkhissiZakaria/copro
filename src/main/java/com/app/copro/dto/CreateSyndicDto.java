@@ -41,7 +41,7 @@ public class CreateSyndicDto {
     private String logoSimplePath;
 
     // Garantie financière
-    private BigDecimal pointeFinanciere;
+    private String pointeFinanciere;
     private String societeGarant;
 
     // Registre copropriété
@@ -59,6 +59,8 @@ public class CreateSyndicDto {
 
     @NotNull(message = "idMakePlan est requis")
     private Long idMakePlan;
+
+    private Boolean isActive = true;
 
     public CreateSyndicDto() {}
 
@@ -198,11 +200,11 @@ public class CreateSyndicDto {
         this.logoSimplePath = logoSimplePath;
     }
 
-    public BigDecimal getPointeFinanciere() {
+    public String getPointeFinanciere() {
         return pointeFinanciere;
     }
 
-    public void setPointeFinanciere(BigDecimal pointeFinanciere) {
+    public void setPointeFinanciere(String pointeFinanciere) {
         this.pointeFinanciere = pointeFinanciere;
     }
 
@@ -276,5 +278,13 @@ public class CreateSyndicDto {
 
     public void setIdMakePlan(Long idMakePlan) {
         this.idMakePlan = idMakePlan;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }

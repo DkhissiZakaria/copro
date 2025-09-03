@@ -2,8 +2,10 @@ package com.app.copro.service;
 
 import com.app.copro.dto.CreateSyndicDto;
 import com.app.copro.dto.SyndicResponseDto;
+import com.app.copro.dto.UpdateSyndicDto;
 import com.app.copro.exception.ProjetNotFoundException;
 import com.app.copro.exception.SyndicCreationException;
+import com.app.copro.exception.SyndicNotFoundException;
 import com.app.copro.model.Projet;
 import com.app.copro.model.Syndic;
 import com.app.copro.repository.ProjetRepository;
@@ -11,9 +13,16 @@ import com.app.copro.repository.SyndicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SyndicService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SyndicService.class);
 
     private final SyndicRepository syndicRepository;
     private final ProjetRepository projetRepository;
@@ -25,8 +34,20 @@ public class SyndicService {
     }
 
     public SyndicResponseDto createSyndic(CreateSyndicDto createSyndicDto) {
+        logger.info("Tentative de création d'un syndic avec idMakePlan: {}", createSyndicDto.getIdMakePlan());
+        
+        if (createSyndicDto.getIdMakePlan() == null) {
+            logger.error("idMakePlan est null");
+            throw new IllegalArgumentException("idMakePlan ne peut pas être null");
+        }
+
         Projet projet = projetRepository.findByIdMakePlan(createSyndicDto.getIdMakePlan())
-                .orElseThrow(() -> new ProjetNotFoundException("Projet avec idMakePlan '" + createSyndicDto.getIdMakePlan() + "' introuvable"));
+                .orElseThrow(() -> {
+                    logger.error("Projet non trouvé avec idMakePlan: {}", createSyndicDto.getIdMakePlan());
+                    return new ProjetNotFoundException("Projet avec idMakePlan '" + createSyndicDto.getIdMakePlan() + "' introuvable");
+                });
+        
+        logger.info("Projet trouvé: {}", projet.getNom());
 
         Syndic syndic = new Syndic();
         syndic.setNom(createSyndicDto.getNom());
@@ -55,14 +76,22 @@ public class SyndicService {
         syndic.setDocAssuranceRcPath(createSyndicDto.getDocAssuranceRcPath());
         syndic.setDocGarantieFinancierePath(createSyndicDto.getDocGarantieFinancierePath());
         syndic.setDocTamponSignaturePath(createSyndicDto.getDocTamponSignaturePath());
+        syndic.setIsActive(createSyndicDto.getIsActive() != null ? createSyndicDto.getIsActive() : true);
         syndic.setProjet(projet);
-        projet.getSyndics().add(syndic);
+        // Temporairement commenté pour diagnostic
+        // projet.getSyndics().add(syndic);
 
         try {
+            logger.info("Tentative de sauvegarde du syndic: {}", syndic.getNom());
             Syndic saved = syndicRepository.save(syndic);
+            logger.info("Syndic sauvegardé avec succès, ID: {}", saved.getId());
             return mapToResponseDto(saved);
         } catch (DataAccessException ex) {
+            logger.error("Erreur DataAccessException lors de la création du syndic", ex);
             throw new SyndicCreationException("Erreur lors de la création du syndic", ex);
+        } catch (Exception ex) {
+            logger.error("Erreur générale lors de la création du syndic", ex);
+            throw new SyndicCreationException("Erreur inattendue lors de la création du syndic", ex);
         }
     }
 
@@ -96,6 +125,79 @@ public class SyndicService {
         dto.setDocGarantieFinancierePath(syndic.getDocGarantieFinancierePath());
         dto.setDocTamponSignaturePath(syndic.getDocTamponSignaturePath());
         dto.setProjetId(syndic.getProjet() != null ? syndic.getProjet().getId() : null);
+        dto.setIsActive(syndic.getIsActive());
         return dto;
+    }
+
+    public SyndicResponseDto getSyndicById(Long id) {
+        Syndic syndic = syndicRepository.findById(id)
+                .orElseThrow(() -> new SyndicNotFoundException(id));
+        return mapToResponseDto(syndic);
+    }
+
+    public SyndicResponseDto updateSyndic(Long id, UpdateSyndicDto updateSyndicDto) {
+        Syndic syndic = syndicRepository.findById(id)
+                .orElseThrow(() -> new SyndicNotFoundException(id));
+
+        syndic.setNom(updateSyndicDto.getNom());
+        syndic.setEmail(updateSyndicDto.getEmail());
+        syndic.setTelephone(updateSyndicDto.getTelephone());
+        syndic.setTelecopie(updateSyndicDto.getTelecopie());
+        syndic.setWeb(updateSyndicDto.getWeb());
+        syndic.setAdresseNumeroRue(updateSyndicDto.getAdresseNumeroRue());
+        syndic.setAdresseComplement(updateSyndicDto.getAdresseComplement());
+        syndic.setAdresseCodePostal(updateSyndicDto.getAdresseCodePostal());
+        syndic.setAdresseVille(updateSyndicDto.getAdresseVille());
+        syndic.setAdresseRegion(updateSyndicDto.getAdresseRegion());
+        syndic.setAdressePays(updateSyndicDto.getAdressePays());
+        syndic.setSiret(updateSyndicDto.getSiret());
+        syndic.setApe(updateSyndicDto.getApe());
+        syndic.setCarteProfessionnelle(updateSyndicDto.getCarteProfessionnelle());
+        syndic.setCapital(updateSyndicDto.getCapital());
+        syndic.setLogoCoordonneesPath(updateSyndicDto.getLogoCoordonneesPath());
+        syndic.setLogoSimplePath(updateSyndicDto.getLogoSimplePath());
+        syndic.setPointeFinanciere(updateSyndicDto.getPointeFinanciere());
+        syndic.setSocieteGarant(updateSyndicDto.getSocieteGarant());
+        syndic.setNumeroTeleDeclarant(updateSyndicDto.getNumeroTeleDeclarant());
+        syndic.setMailTeleDeclarant(updateSyndicDto.getMailTeleDeclarant());
+        syndic.setDescription(updateSyndicDto.getDescription());
+        syndic.setDocCarteProfessionnellePath(updateSyndicDto.getDocCarteProfessionnellePath());
+        syndic.setDocAssuranceRcPath(updateSyndicDto.getDocAssuranceRcPath());
+        syndic.setDocGarantieFinancierePath(updateSyndicDto.getDocGarantieFinancierePath());
+        syndic.setDocTamponSignaturePath(updateSyndicDto.getDocTamponSignaturePath());
+        syndic.setIsActive(updateSyndicDto.getIsActive() != null ? updateSyndicDto.getIsActive() : syndic.getIsActive());
+
+        try {
+            Syndic updated = syndicRepository.save(syndic);
+            return mapToResponseDto(updated);
+        } catch (DataAccessException ex) {
+            throw new SyndicCreationException("Erreur lors de la mise à jour du syndic", ex);
+        }
+    }
+
+    public List<SyndicResponseDto> getSyndicsByIdMakePlan(Long idMakePlan) {
+        try {
+            // Vérifier que le projet existe
+            projetRepository.findByIdMakePlan(idMakePlan)
+                    .orElseThrow(() -> new ProjetNotFoundException("Projet avec idMakePlan '" + idMakePlan + "' introuvable"));
+
+            // Récupérer les syndics par idMakePlan
+            List<Syndic> syndics = syndicRepository.findByProjetIdMakePlan(idMakePlan);
+            logger.info("Trouvé {} syndics pour idMakePlan {}", syndics.size(), idMakePlan);
+            
+            return syndics.stream()
+                    .map(syndic -> {
+                        try {
+                            return mapToResponseDto(syndic);
+                        } catch (Exception e) {
+                            logger.error("Erreur lors du mapping du syndic ID {}: {}", syndic.getId(), e.getMessage(), e);
+                            throw new SyndicCreationException("Erreur lors du mapping du syndic", e);
+                        }
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Erreur dans getSyndicsByIdMakePlan pour idMakePlan {}: {}", idMakePlan, e.getMessage(), e);
+            throw e;
+        }
     }
 }

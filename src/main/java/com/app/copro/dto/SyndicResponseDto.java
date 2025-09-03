@@ -20,7 +20,7 @@ public class SyndicResponseDto {
     private String capital;
     private String logoCoordonneesPath;
     private String logoSimplePath;
-    private java.math.BigDecimal pointeFinanciere;
+    private String pointeFinanciere;
     private String societeGarant;
     private String numeroTeleDeclarant;
     private String mailTeleDeclarant;
@@ -30,6 +30,7 @@ public class SyndicResponseDto {
     private String docGarantieFinancierePath;
     private String docTamponSignaturePath;
     private Long projetId;
+    private Boolean isActive;
 
     public SyndicResponseDto() {}
 
@@ -89,8 +90,13 @@ public class SyndicResponseDto {
     public String getLogoSimplePath() { return logoSimplePath; }
     public void setLogoSimplePath(String logoSimplePath) { this.logoSimplePath = logoSimplePath; }
 
-    public java.math.BigDecimal getPointeFinanciere() { return pointeFinanciere; }
-    public void setPointeFinanciere(java.math.BigDecimal pointeFinanciere) { this.pointeFinanciere = pointeFinanciere; }
+    public String getPointeFinanciere() {
+        return pointeFinanciere;
+    }
+
+    public void setPointeFinanciere(String pointeFinanciere) {
+        this.pointeFinanciere = pointeFinanciere;
+    }
 
     public String getSocieteGarant() { return societeGarant; }
     public void setSocieteGarant(String societeGarant) { this.societeGarant = societeGarant; }
@@ -118,4 +124,7 @@ public class SyndicResponseDto {
 
     public Long getProjetId() { return projetId; }
     public void setProjetId(Long projetId) { this.projetId = projetId; }
+
+    public Boolean getIsActive() { return isActive; }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 }

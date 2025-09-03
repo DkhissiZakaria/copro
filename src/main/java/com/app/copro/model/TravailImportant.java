@@ -14,7 +14,7 @@ public class TravailImportant {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private String entreprise;     // prestataire
-    @Lob private String details;   // description, notes
+    @Column(length = 3000) private String details;   // description, notes
 
     // N–1 vers Carnet
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
